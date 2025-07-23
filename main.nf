@@ -17,7 +17,6 @@ log.info """
     CAUSAL INFERENCE WORKFLOW
     =========================
     Output directory: ${params.outdir}
-    Container: ${params.container}
     """
 
 /*
