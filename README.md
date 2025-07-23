@@ -1,6 +1,6 @@
 # Causal Inference Workflow in R
 
-이 프로젝트는 R을 사용한 인과추론(Causal Inference) 분석을 Nextflow와 WDL 워크플로우로 구현한 예제입니다. [r-causal.org](https://www.r-causal.org/)의 내용을 기반으로 하여 실제 워크플로우 환경에서 실행할 수 있도록 구성되었습니다.
+이 프로젝트는 R을 사용한 인과추론(Causal Inference) 분석을 Nextflow 워크플로우로 구현한 예제입니다. [r-causal.org](https://www.r-causal.org/)의 내용을 기반으로 하여 실제 워크플로우 환경에서 실행할 수 있도록 구성되었습니다.
 
 ## 📋 프로젝트 개요
 
@@ -14,32 +14,23 @@
 ## 🏗️ 프로젝트 구조
 
 ```
-causal-inference-workflow/
+ca_workflow/
 ├── Dockerfile                 # R 환경과 필요한 패키지들을 포함한 컨테이너
 ├── nextflow.config           # Nextflow 설정 파일
 ├── main.nf                   # Nextflow 워크플로우 정의
-├── causal_inference.wdl      # WDL 워크플로우 정의
-├── scripts/                  # R 분석 스크립트들
-│   ├── 01_generate_data.R    # 합성 데이터 생성
-│   ├── 02_exploratory_analysis.R  # 탐색적 데이터 분석
-│   ├── 03_propensity_matching.R   # 성향점수 매칭
-│   └── 04_final_results.R    # 최종 결과 요약
 ├── build_docker.sh           # Docker 이미지 빌드 스크립트
-├── run_nextflow.sh          # Nextflow 실행 스크립트
-├── run_wdl.sh               # WDL 실행 스크립트
-├── test_standalone.R        # 독립 실행 테스트 스크립트
-└── README.md                # 이 파일
+├── upload_docker.sh          # Docker 이미지를 ECR에 업로드하는 스크립트
+├── run_nextflow.sh           # Nextflow 실행 스크립트
+└── README.md                 # 이 파일
 ```
 
 ## 🔧 필요한 도구들
 
 ### 기본 요구사항
 - Docker
-- R (독립 실행시)
 
-### 워크플로우 엔진 (선택사항)
+### 워크플로우 엔진
 - **Nextflow**: [설치 가이드](https://www.nextflow.io/docs/latest/getstarted.html)
-- **Cromwell** (WDL용): [다운로드](https://github.com/broadinstitute/cromwell/releases)
 
 ## 🚀 실행 방법
 
@@ -52,26 +43,20 @@ chmod +x build_docker.sh
 ./build_docker.sh
 ```
 
-### 2. Nextflow로 실행
+### 2. Docker 이미지 업로드 (선택사항)
+
+빌드된 Docker 이미지를 AWS ECR에 업로드합니다:
+
+```bash
+chmod +x upload_docker.sh
+./upload_docker.sh
+```
+
+### 3. Nextflow로 실행
 
 ```bash
 chmod +x run_nextflow.sh
 ./run_nextflow.sh
-```
-
-### 3. WDL/Cromwell로 실행
-
-```bash
-chmod +x run_wdl.sh
-./run_wdl.sh
-```
-
-### 4. 독립 실행 (R만 사용)
-
-Docker나 워크플로우 엔진 없이 R만으로 실행:
-
-```bash
-Rscript test_standalone.R
 ```
 
 ## 📊 생성되는 결과물
@@ -137,7 +122,7 @@ Rscript test_standalone.R
 
 1. **인과추론의 기본 개념**: 교란변수와 선택편향
 2. **성향점수 매칭**: 관찰연구에서 인과효과 추정
-3. **워크플로우 관리**: Nextflow/WDL을 이용한 재현가능한 분석
+3. **워크플로우 관리**: Nextflow를 이용한 재현가능한 분석
 4. **컨테이너화**: Docker를 이용한 환경 표준화
 5. **결과 시각화**: ggplot2를 이용한 효과적인 그래프 작성
 
@@ -152,7 +137,7 @@ Rscript test_standalone.R
 ### 분석 방법 추가
 새로운 인과추론 방법을 추가하려면:
 1. 새 R 스크립트 작성
-2. Nextflow/WDL 워크플로우에 프로세스 추가
+2. Nextflow 워크플로우에 프로세스 추가
 3. Docker 이미지에 필요한 패키지 추가
 
 ## 📚 참고 자료
@@ -160,7 +145,6 @@ Rscript test_standalone.R
 - [Causal Inference in R](https://www.r-causal.org/)
 - [MatchIt 패키지 문서](https://kosukeimai.github.io/MatchIt/)
 - [Nextflow 문서](https://www.nextflow.io/docs/latest/)
-- [WDL 문서](https://openwdl.org/)
 
 ## 🤝 기여하기
 
