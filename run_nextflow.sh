@@ -13,6 +13,8 @@ echo "Running Causal Inference Workflow with Nextflow..."
 # Clean previous results
 rm -rf results work .nextflow*
 
+cd nf_workflow
+
 # Run Nextflow workflow
 nextflow run main.nf \
     -profile docker \

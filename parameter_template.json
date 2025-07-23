@@ -1,0 +1,6 @@
+{
+	"ecr_registry":{
+		"description": "Name of ECR REGISTRY <ACCOUINT_ID>.dkr.ecr.<AWS_REGION>.amazonaws.com",
+		"optional": false
+	}
+}
