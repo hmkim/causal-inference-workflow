@@ -29,7 +29,7 @@ causal-inference-workflow/
 ├── parameter_template.json  # 워크플로우 파라미터 템플릿
 ├── workflow_package.zip     # 패키징된 워크플로우 파일
 ├── .gitignore              # Git 무시 파일 목록
-└── README.md               # 이 파일
+└── README.md
 ```
 
 ## 🔧 필요한 도구들
@@ -52,7 +52,7 @@ chmod +x build_docker.sh
 ./build_docker.sh
 ```
 
-### 2. Docker 이미지 업로드 (선택사항)
+### 2. Docker 이미지 업로드
 
 빌드된 Docker 이미지를 AWS ECR에 업로드합니다:
 
@@ -71,12 +71,42 @@ chmod +x run_nextflow.sh
 
 ### 4. AWS HealthOmics에 배포 (선택사항)
 
-워크플로우를 AWS HealthOmics에 배포하여 클라우드에서 실행할 수 있습니다:
+워크플로우를 AWS HealthOmics에 배포하여 클라우드에서 실행할 수 있습니다.
+
+#### 사전 요구사항
+- AWS CLI가 설치되어 있어야 합니다
+- AWS 자격 증명(Credentials)이 구성되어 있어야 합니다:
+  ```bash
+  aws configure
+  ```
+- HealthOmics 서비스에 대한 적절한 IAM 권한이 필요합니다
+- 워크플로우 패키지를 저장할 S3 버킷이 필요합니다
+
+#### 배포 실행
+환경 변수를 설정하여 스크립트를 실행합니다:
 
 ```bash
+# 필수: S3 버킷 이름 설정
+export BUCKET_NAME=your-healthomics-bucket
+
+# 선택사항: AWS 리전 설정 (기본값: us-east-1)
+export AWS_REGION=us-east-1
+
+# 배포 스크립트 실행
 chmod +x deploy_to_healthomics.sh
 ./deploy_to_healthomics.sh
 ```
+
+또는 한 줄로 실행:
+```bash
+BUCKET_NAME=your-healthomics-bucket AWS_REGION=us-east-1 ./deploy_to_healthomics.sh
+```
+
+#### 배포 과정
+스크립트는 다음 단계를 자동으로 수행합니다:
+1. `nf_workflow` 디렉토리를 `workflow_package.zip`으로 압축
+2. 압축된 파일을 S3 버킷의 `workflows/` prefix 하위에 업로드
+3. AWS HealthOmics에서 새 워크플로우 생성
 
 ## 📊 생성되는 결과물
 
