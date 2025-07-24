@@ -14,14 +14,22 @@
 ## 🏗️ 프로젝트 구조
 
 ```
-ca_workflow/
-├── Dockerfile                 # R 환경과 필요한 패키지들을 포함한 컨테이너
-├── nextflow.config           # Nextflow 설정 파일
-├── main.nf                   # Nextflow 워크플로우 정의
-├── build_docker.sh           # Docker 이미지 빌드 스크립트
-├── upload_docker.sh          # Docker 이미지를 ECR에 업로드하는 스크립트
-├── run_nextflow.sh           # Nextflow 실행 스크립트
-└── README.md                 # 이 파일
+causal-inference-workflow/
+├── docker/                   # Docker 관련 파일들
+│   ├── Dockerfile           # R 환경과 필요한 패키지들을 포함한 컨테이너
+│   ├── build_docker.sh      # Docker 이미지 빌드 스크립트
+│   └── upload_docker.sh     # Docker 이미지를 ECR에 업로드하는 스크립트
+├── nf_workflow/             # Nextflow 워크플로우 파일들
+│   ├── main.nf              # Nextflow 워크플로우 정의
+│   ├── nextflow.config      # Nextflow 설정 파일
+│   └── conf/
+│       └── omics.config     # AWS HealthOmics 설정
+├── run_nextflow.sh          # Nextflow 실행 스크립트
+├── deploy_to_healthomics.sh # AWS HealthOmics 배포 스크립트
+├── parameter_template.json  # 워크플로우 파라미터 템플릿
+├── workflow_package.zip     # 패키징된 워크플로우 파일
+├── .gitignore              # Git 무시 파일 목록
+└── README.md               # 이 파일
 ```
 
 ## 🔧 필요한 도구들
@@ -39,6 +47,7 @@ ca_workflow/
 먼저 필요한 R 패키지들이 포함된 Docker 이미지를 빌드합니다:
 
 ```bash
+cd docker
 chmod +x build_docker.sh
 ./build_docker.sh
 ```
@@ -48,6 +57,7 @@ chmod +x build_docker.sh
 빌드된 Docker 이미지를 AWS ECR에 업로드합니다:
 
 ```bash
+cd docker
 chmod +x upload_docker.sh
 ./upload_docker.sh
 ```
@@ -57,6 +67,15 @@ chmod +x upload_docker.sh
 ```bash
 chmod +x run_nextflow.sh
 ./run_nextflow.sh
+```
+
+### 4. AWS HealthOmics에 배포 (선택사항)
+
+워크플로우를 AWS HealthOmics에 배포하여 클라우드에서 실행할 수 있습니다:
+
+```bash
+chmod +x deploy_to_healthomics.sh
+./deploy_to_healthomics.sh
 ```
 
 ## 📊 생성되는 결과물
